@@ -42,20 +42,19 @@ def main():
     log_info('Running xunique')
     run_cmd_args(['xunique', xcode_project_name])
 
-    if not repo.is_dirty():
-        log_info('No changes were made by hook')
-        sys.exit(0)
-    
-    log_info('Adding changes made by hook')
-    git.add(curdir)
+    if repo.is_dirty():
+        log_info('Adding changes made by hook')
+        git.add(curdir)
 
-    log_info('Committing changes made by hook')
-    git.commit('--no-verify', '-m', '[pre-push] Run synx and xunique')
+        log_info('Committing changes made by hook')
+        git.commit('--no-verify', '-m', '[pre-push] Run synx and xunique')
+    else:
+        log_info('No changes were made by hook')
     
     if changes_stashed:
         log_info('Popping temporary stash')
 
-        stash_ref = _git.log('-g', 'stash', '--grep={}'.format(stash_message), '--pretty=format:%gd')
+        stash_ref = _git.log('-g', 'stash', '--grep={}'.format(git_stash_message), '--pretty=format:%gd')
         git.stash('pop', stash_ref)
 
 
