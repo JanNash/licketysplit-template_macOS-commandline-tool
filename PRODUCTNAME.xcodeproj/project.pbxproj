@@ -53,8 +53,8 @@
 		ED1AAC6121F67C7E00D5D1AA /* PRODUCTNAMETests */ = {
 			isa = PBXGroup;
 			children = (
-				ED1AAC6221F67C7E00D5D1AA /* PRODUCTNAMETests.swift */,
 				ED1AAC6421F67C7E00D5D1AA /* Info.plist */,
+				ED1AAC6221F67C7E00D5D1AA /* PRODUCTNAMETests.swift */,
 			);
 			path = PRODUCTNAMETests;
 			sourceTree = "<group>";
