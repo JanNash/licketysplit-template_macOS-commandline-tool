@@ -19,7 +19,11 @@ def main():
     xcode_project_name = 'PRODUCTNAME.xcodeproj'
 
     logging.info('[pre-push] > Running synx')
-    logging.debug(subprocess.run(['synx', '--prune', xcode_project_name], stdout=subprocess.PIPE))
+    synx_cmd_args = ['synx', '--prune', xcode_project_name]
+    logging.debug(">>> {}".format(' '.join(synx_cmd_args)))
+    synx_proc = subprocess.run(synx_cmd_args, encoding='utf-8', stdout=subprocess.PIPE)
+    for line in synx_proc.stdout.split('\n'):
+        logging.debug(line)
 
     logging.info('[pre-push] > Running xunique')
 
