@@ -7,6 +7,8 @@ from git import Repo
 
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)
+
     repo = Repo(os.path.curdir)
     _git = repo.git
 
@@ -17,7 +19,7 @@ def main():
     xcode_project_name = 'PRODUCTNAME.xcodeproj'
 
     logging.info('[pre-push] > Running synx')
-    result = subprocess.run(['synx', '--prune', xcode_project_name], stdout=subprocess.PIPE)
+    logging.debug(subprocess.run(['synx', '--prune', xcode_project_name], stdout=subprocess.PIPE))
 
     logging.info('[pre-push] > Running xunique')
 
