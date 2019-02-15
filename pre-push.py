@@ -44,10 +44,10 @@ def main():
 
     if repo.is_dirty():
         log_info('Adding changes made by hook')
-        git.add(curdir)
+        _git.add(curdir)
 
         log_info('Committing changes made by hook')
-        git.commit('--no-verify', '-m', '[pre-push] Run synx and xunique')
+        _git.commit('--no-verify', '-m', '[pre-push] Run synx and xunique')
     else:
         log_info('No changes were made by hook')
     
@@ -55,7 +55,7 @@ def main():
         log_info('Popping temporary stash')
 
         stash_ref = _git.log('-g', 'stash', '--grep={}'.format(git_stash_message), '--pretty=format:%gd')
-        git.stash('pop', stash_ref)
+        _git.stash('pop', stash_ref)
 
 
 if __name__ == '__main__':
