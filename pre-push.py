@@ -54,7 +54,7 @@ def main():
     if changes_stashed:
         log_info('Popping temporary stash')
 
-        stash_ref = _git.log('-g', 'stash', '--grep={}'.format(git_stash_message), '--pretty=format:%gd')
+        stash_ref = _git.log('-g', 'stash', '--grep="{}"'.format(git_stash_message), '--pretty=format:"%gd"')
         _git.stash('pop', stash_ref)
 
 
