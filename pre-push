@@ -1,0 +1,61 @@
+#!/bin/bash
+
+
+STASH_MESSAGE="<post-merge-hook> Temporary stash, do not pop or delete"
+
+function stash_all_changes
+{
+    echo "[pre-push] > Saving all local changes in a temporary stash"
+    git add .
+    git stash save -u $STASH_MESSAGE
+}
+
+function commit_changes_from_hook
+{
+    echo "[pre-push] > Committing new changes"
+    git add .
+    git commit --no-verify -m "[pre-push] Run synx and xUnique"
+    return $?
+}
+
+function pop_stash
+{
+    if [ ! -z "$(git stash list)" ]
+    then
+        STASH_REF="$(git log -g stash --grep="$STASH_MESSAGE" --pretty=format:"%gd")"
+        if [ ! -z "$STASH_REF" ]
+        then 
+            echo "# # #"
+            echo "[pre-push] > Popping temporary stash..."
+            git stash pop "$STASH_REF"
+        fi
+    fi
+}
+
+
+function main
+{
+    echo "# # # # #"
+    stash_all_changes
+    echo "# # #"
+    git ls-files | grep .xcodeproj/project.pbxproj | sed -e "s/project.pbxproj$//" | xargs -I{} synx --prune "{}"
+    echo "# # #"
+    git ls-files | grep .xcodeproj/project.pbxproj | sed -e "s/project.pbxproj$//" | xargs -I{} xunique "{}"
+    echo "# # #"
+    commit_changes_from_hook
+    NOCHANGESMADE=$?
+    pop_stash
+    
+    if [[ $NOCHANGESMADE -ne 0 ]]
+    then
+        echo "# # # # #"
+        exit 0
+    else 
+        echo "# # #"
+        echo "[pre-push] > Committed new changes, please review, commit and push again."
+        echo "# # # # #"
+        exit 1
+    fi
+}
+
+main
