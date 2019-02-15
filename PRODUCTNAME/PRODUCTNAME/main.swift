@@ -8,3 +8,6 @@
 
 import Foundation
 
+
+// Remove this and get creative!
+public func TheAnswerToTheUltimateQuestionOfLifeTheUniverseAndEverything() -> Int { return 42 }

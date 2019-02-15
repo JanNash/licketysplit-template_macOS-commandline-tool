@@ -28,7 +28,7 @@ class PRODUCTNAMETests: XCTestCase {
     }
 
     func testExample() {
-        
+        XCTAssert(TheAnswerToTheUltimateQuestionOfLifeTheUniverseAndEverything() == 42)
     }
 
     func testPerformanceExample() {
