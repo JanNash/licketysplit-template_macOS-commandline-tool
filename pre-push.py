@@ -43,7 +43,7 @@ def main():
     run_cmd_args(['xunique', xcode_project_name])
 
     if not repo.is_dirty():
-        log_info('No changes were made')
+        log_info('No changes were made by hook')
         sys.exit(0)
     
     log_info('Adding changes made by hook')
