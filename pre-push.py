@@ -23,7 +23,7 @@ def run_cmd_args(cmd_args):
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     logging.getLogger('git').setLevel(logging.WARNING)
 
     curdir = os.path.curdir
