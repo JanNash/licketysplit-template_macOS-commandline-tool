@@ -61,7 +61,8 @@ def main():
         log_info('Popping temporary stash')
 
         stash_ref_key = 'stash_ref'
-        stash_regex = re.compile('(?P<{}>stash@{{[0-9]+}}).*{}\n?'.format(stash_ref_key, stash_message))
+        stash_message_escaped = re.escape(stash_message)
+        stash_regex = re.compile('(?P<{}>stash@{{[0-9]+}}).*{}\n?'.format(stash_ref_key, stash_message_escaped))
         stash_list = _git.stash('list')
 
         log_debug(f'All stashes: {stash_list}')
