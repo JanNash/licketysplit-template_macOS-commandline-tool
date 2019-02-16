@@ -76,7 +76,7 @@ def main():
 
         stash_ref = matching_stashes[0]
 
-        log_debug(f'Popping stash {stash_ref}')
+        log_debug(f'Popping "{stash_ref}"')
         _git.stash('pop', stash_ref)
 
 
