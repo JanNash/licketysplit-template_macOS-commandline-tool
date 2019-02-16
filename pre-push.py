@@ -65,6 +65,8 @@ def main():
         stash_list = _git.stash('list')
         matching_stashes = stash_regex.findall(stash_list)
 
+        log_debug(f'Found matching stashes: {matching_stashes}')
+
         num_of_matching_stashes = len(matching_stashes)
         assert num_of_matching_stashes > 0, f'Stash not found with message {stash_message}'
         assert num_of_matching_stashes == 1, f'More than one ({num_of_matching_stashes}) stash found with message {stash_message}'
