@@ -2,13 +2,18 @@
 
 import logging
 import os
+import re
 import subprocess
 import sys
+import uuid
 from git import Repo
 
 
 def log_info(msg):
     logging.info('[pre-push] > {}'.format(msg))
+
+def log_debug(msg):
+    logging.debug('[pre-push] > {}'.format(msg))
 
 def run_cmd_args(cmd_args):
     logging.debug(' >>> {}'.format(' '.join(cmd_args)))
@@ -27,11 +32,12 @@ def main():
 
     changes_stashed = False
 
+    _git.add('.')
     if repo.is_dirty():
         log_info('Saving all local changes in a temporary stash')
-        # TODO: This should maybe actually use a uuid or something else unique, I guess...
-        git_stash_message = '[pre-push] Temporary stash, do not pop or delete'
-        _git.stash('save', '-u', git_stash_message)
+        stash_message = '[pre-push] Temporary stash, do not delete. {}'.format(uuid.uuid4().hex)
+        log_debug(f'Message for temporary stash: {stash_message}')
+        _git.stash('push', '-u', '-m', stash_message)
         changes_stashed = True
 
     xcode_project_name = 'PRODUCTNAME.xcodeproj'
@@ -54,7 +60,18 @@ def main():
     if changes_stashed:
         log_info('Popping temporary stash')
 
-        stash_ref = _git.log('-g', 'stash', '--grep="{}"'.format(git_stash_message), '--pretty=format:"%gd"')
+        stash_ref_key = 'stash_ref'
+        stash_regex = re.compile(f'(?P<{stash_ref_key}>stash@{{[0-9]+}}).*{stash_message}\n?')
+        stash_list = _git.stash('list')
+        matching_stashes = stash_regex.findall(stash_list)
+
+        num_of_matching_stashes = len(matching_stashes)
+        assert(num_of_matching_stashes > 0, f'Stash not found with message {stash_message}')
+        assert(num_of_matching_stashes == 1, f'More than one ({num_of_matching_stashes}) stash found with message {stash_message}')
+
+        stash_ref = matching_stashes[0]
+
+        log_debug(f'Popping stash {stash_ref}')
         _git.stash('pop', stash_ref)
 
 
