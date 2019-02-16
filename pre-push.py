@@ -65,7 +65,7 @@ def main():
         stash_regex = re.compile('(?P<{}>stash@{{[0-9]+}}).*{}\n?'.format(stash_ref_key, stash_message_escaped))
         stash_list = _git.stash('list')
 
-        log_debug(f'All stashes: {stash_list}')
+        log_debug('All stashes: \n{}'.format(stash_list))
         matching_stashes = stash_regex.findall(stash_list)
 
         log_debug(f'Found matching stashes: {matching_stashes}')
