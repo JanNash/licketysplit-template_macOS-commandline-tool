@@ -35,7 +35,7 @@ def main():
     _git.add('.')
     if repo.is_dirty():
         log_info('Saving all local changes in a temporary stash')
-        stash_message = '[pre-push] Temporary stash, do not delete. {}'.format(uuid.uuid4().hex)
+        stash_message = '[pre-push] Temporary stash, do not delete. <id: {}>'.format(uuid.uuid4().hex)
         log_debug(f'Message for temporary stash: {stash_message}')
         _git.stash('push', '-u', '-m', stash_message)
         changes_stashed = True
@@ -68,8 +68,8 @@ def main():
         log_debug(f'Found matching stashes: {matching_stashes}')
 
         num_of_matching_stashes = len(matching_stashes)
-        assert num_of_matching_stashes > 0, f'Stash not found with message {stash_message}'
-        assert num_of_matching_stashes == 1, f'More than one ({num_of_matching_stashes}) stash found with message {stash_message}'
+        assert num_of_matching_stashes > 0, f'Stash not found with message "{stash_message}"'
+        assert num_of_matching_stashes == 1, f'More than one ({num_of_matching_stashes}) stash found with message "{stash_message}"'
 
         stash_ref = matching_stashes[0]
 
